@@ -1,7 +1,7 @@
 
   {% extends "base.html" %}
   {% block content %}
-      <p>
+      
         <div class="form-card container">
             <div class="row">
             <div class="col-lg-12 no-float">
@@ -9,22 +9,22 @@
          
             <div class="card mr-1">
               <div class="card-body">
-                <h5 class="card-title">Layer info</h5>
+                <h5 class="card-title">Train</h5>
                 {% for i in layers %}
+                <form  action = "http://localhost:5000/uploader" method = "POST"
+                  enctype = "multipart/form-data">
+                  <p class="card-text">
                 <div class="form-group row">         
                     <label class="col-sm-12 col-form-label">Layer {{ i }}</label>
                     <div class="col-sm-10">
-                      <input type="number" class="form-control" id="inputlayer{{i}}">
+                      <input type="number" class="form-control" id="inputlayer{{i}}" name="{{i}}">
                     </div>
                   </div>
-                  {% endfor %}
-              </div></div></div></div></div>
-                </p>                               
-                  
+                </p> 
+                  {% endfor %}                  
                 <span ><button class="btn btn mybts" type = "submit">Train</button></span>
                 <span ><button class="btn btn mybts" type = "submit">Predict</button></span> 
-            
-              </form>             
+            </form>    </div></div></div></div></div>         
                      
     
       <footer />
