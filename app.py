@@ -67,7 +67,7 @@ def getlayers():
     global layers_dims
     layers_dims = []
     if request.method == 'POST':
-        print(request.form)
+        print(request.form["1"])
         return render_template('', layers=layers) #3 to test
     
 

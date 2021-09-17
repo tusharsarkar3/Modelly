@@ -11,7 +11,7 @@
               <div class="card-body">
                 <h5 class="card-title">Train</h5>
                 {% for i in layers %}
-                <form  action = "http://localhost:5000/uploader" method = "POST"
+                <form  action = "http://localhost:5000/layers" method = "POST"
                   enctype = "multipart/form-data">
                   <p class="card-text">
                 <div class="form-group row">         
@@ -22,7 +22,7 @@
                   </div>
                 </p> 
                   {% endfor %}                  
-                <span ><button class="btn btn mybts" type = "submit">Train</button></span>
+                <span ><button class="btn btn mybts" type = "submit" >Train</button></span>
                 <span ><button class="btn btn mybts" type = "submit">Predict</button></span> 
             </form>    </div></div></div></div></div>         
                      
