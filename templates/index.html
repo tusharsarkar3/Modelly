@@ -11,27 +11,32 @@
                 
                 <form  action = "http://localhost:5000/uploader" method = "POST"
                   enctype = "multipart/form-data">
-                  <p class="card-text"></p>
+                  <p class="card-text">
                   <label class="col-lg-8 row col-form-label">Upload a csv file</label>                  
                   <input class="form-control-file form col-sm-5" style="border-radius: 2px; background-color: rgba(117, 114, 109, 0.466);" 
                   type = "file" name = "csvfile" />
                   <div class="form-group row">
                     <label class="col-lg-12 col-form-label">Model Name</label>
                     <div class="col-lg-12">
-                      <select class="form-control">
+                      <select class="form-control" name="model">
                         <option>XBNet</option>
                         <option>XGBoost</option>
                         <option>etc.</option>
                       </select>
                     </div>
-                  </div>    <br>
+                  </div>
                   <div class="form-group row">
                     <label class="col-lg-8 col-form-label">Number of layers</label>
                     <div class="col-lg-8">
-                      <input type="number" class="form-control" id="inputlayers">
+                      <input type="number" class="form-control" id="inputlayers" name="num_layers">
                     </div>
                   </div>
-                
+                <div class="form-group row">
+                    <label class="col-lg-8 col-form-label">Target Feature </label>
+                    <div class="col-lg-8">
+                      <input type="text" class="form-control" id="target" name="target">
+                    </div>
+                  </div>
                 </p>                               
                   
                 <span ><button class="btn btn mybts" type = "submit">Next</button></span>
@@ -43,7 +48,6 @@
           </div>
         </div>
     </div>
-
       <footer />
     </div>
     <script

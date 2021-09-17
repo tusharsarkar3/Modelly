@@ -4,7 +4,7 @@
 
 
 .intro{
-  background-color:rgb(13, 13, 77);
+  background-color:rgba(13, 13, 77, 0.644);
   height:100%;
   color: white;
   vertical-align: middle;
@@ -19,25 +19,15 @@
   color:#ec660c;
 }
 
-.nav-m {
-  background-color: #fff !important;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.nav {
-  padding-left: 2px !important;
-  padding-right: 2px !important;
-}
-.navbar-brand {
-  width: 80px;
-  height: 50px;
+
+body{
+  background-image: url(https://freedesignfile.com/upload/2017/06/Origami-black-background-vectors.jpg);
+  background-position: 100%;
+  background-size: cover;
+   
 }
 
-.navbar-logo {
-  height: 100%;
-  width: 100%;
-}
+
 main {
   height:100%;
 }
@@ -75,7 +65,7 @@ main {
 .card {
   align-content: center;
   
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.575);
 }
 
 html,body,.container {
