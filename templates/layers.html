@@ -1,0 +1,39 @@
+
+  {% extends "base.html" %}
+  {% block content %}
+      <p>
+        <div class="form-card container">
+            <div class="row">
+            <div class="col-lg-12 no-float">
+          
+         
+            <div class="card mr-1">
+              <div class="card-body">
+                <h5 class="card-title">Layer info</h5>
+                {% for i in layers %}
+                <div class="form-group row">         
+                    <label class="col-sm-12 col-form-label">Layer {{ i }}</label>
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" id="inputlayer{{i}}">
+                    </div>
+                  </div>
+                  {% endfor %}
+              </div></div></div></div></div>
+                </p>                               
+                  
+                <span ><button class="btn btn mybts" type = "submit">Train</button></span>
+                <span ><button class="btn btn mybts" type = "submit">Predict</button></span> 
+            
+              </form>             
+                     
+    
+      <footer />
+    
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+      crossorigin="anonymous"
+    ></script>
+       
+  
+{% endblock %}
