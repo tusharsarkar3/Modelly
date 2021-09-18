@@ -34,6 +34,6 @@ tqdm==4.62.2
 typing-extensions==3.10.0.2
 urllib3==1.26.6
 Werkzeug==2.0.1
-XBNet==1.4.2
+XBNet==1.4.3
 xgboost==1.4.2
 zipp==3.5.0
