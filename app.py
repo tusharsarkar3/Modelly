@@ -263,5 +263,6 @@ def predict_results():
     # toast(text="Predicted_Results.csv in this directory has the results",
     #                    duration = 10)
 
+
 if __name__ == '__main__':
     app.run(debug=True)
