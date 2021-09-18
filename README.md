@@ -1,16 +1,16 @@
 # Modelly 
-### Your one stop destination for building state of the art machine and deep learning models.
+## Your one stop destination for building state of the art machine and deep learning models.
 
 [![](https://img.shields.io/badge/Made_with-PyTorch-res?style=for-the-badge&logo=pytorch)](https://pytorch.org/ "PyTorch")
 
-Modelly is a no-code solution for building, training and inferring from your built models. It allows everyone to create their own model and 
+<h6> Modelly is a no-code solution for building, training and inferring from your built models. It allows everyone to create their own model and 
 training them by just selecting the dataset and the name of the required
  model. For purely non-technical professionals, it allows you to build 
 and train models in such a way that no hyperparameters are required 
 and you can easily use it in a hassle-free way. For technical 
 professionals, it allows you to focus on the core architecture and 
 hyperparameters without any coding requirements to build an optimal 
-architecture.
+architecture. </h6>
 ---
 
 ## Features
