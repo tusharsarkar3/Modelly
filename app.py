@@ -132,7 +132,7 @@ def process_input():
 
 
 def train():
-    global model_tree, model_trained, acc, val_acc
+    global model_tree, model_trained, acc, val_ac
     X_train, X_test, y_train, y_test = train_test_split(x_data, y_data,
                                                         test_size=0.3, random_state=0)
     if model_name == "xbnet" or model_name =="neural network":
