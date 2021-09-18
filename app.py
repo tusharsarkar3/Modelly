@@ -84,12 +84,15 @@ def getlayers():
             print(layers_dims)
             train()
             path = os.path.join("static/", "images")
+            print(path)
             if os.path.isdir(path) == False:
+                
                 os.mkdir(path)
             if os.path.isfile("static\images\Training_graphs.png") == True:
                 os.remove("static\images\Training_graphs.png")
             shutil.move("Training_graphs.png", path)
-            return render_template("results.html",info={"training_acc":acc[-1],"testing_acc":val_ac[-1]})
+            return render_template("results.html",info={"training_acc":acc[-1],"testing_acc":val_ac[-1], 
+            "img":True})
 
         elif (model_name == "xgboost" or model_name == "randomforest"
               or model_name == "decision tree" or model_name == "lightgbm"):
@@ -101,7 +104,8 @@ def getlayers():
             print(layers_dims)
             train()
 
-            return render_template("results.html",info={"training_acc":training_acc,"testing_acc":testing_acc})
+            return render_template("results.html",info={"training_acc":training_acc,
+            "testing_acc":testing_acc, "img":False})
     
 @app.route('/default', methods=['GET', 'POST'])
 def default():
@@ -117,7 +121,8 @@ def default():
         os.remove(file[0])
     layers_dims = [100, 6, 0.3, 1, 1]
     train()
-    return render_template("results.html",info={"training_acc":training_acc,"testing_acc":testing_acc})
+    return render_template("results.html",info={"training_acc":training_acc,"testing_acc":testing_acc,
+    "img":False})
 
 @app.route('/download', methods=['GET', 'POST'])
 def download():

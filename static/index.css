@@ -66,6 +66,9 @@ main {
   font-weight: bolder;
   background-color: rgba(255, 255, 255, 0.192);
 }
+.card-title{
+  text-align: center;
+}
 
 html,body,.container {
   height:100%;
