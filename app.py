@@ -75,7 +75,8 @@ def getlayers():
                 layers_dims.append(int(request.form["o" + str(i)]))
             print(layers_dims)
             train()
-            return render_template('layers.html', layers=layers)
+            return render_template("results.html",info={"training_acc":acc[-1],"testing_acc":val_ac[-1]})
+
         elif (model_name == "xgboost" or model_name == "randomforest"
               or model_name == "decision tree" or model_name == "lightgbm"):
             for i in request.form.keys():
@@ -85,7 +86,7 @@ def getlayers():
                     layers_dims.append(float(request.form[i]))
             print(layers_dims)
             train()
-            return render_template('treesinp.html', layers=layers) #3 to test
+            return render_template("results.html",info={"training_acc":training_acc,"testing_acc":testing_acc})
     
 @app.route('/default', methods=['GET', 'POST'])
 def default():
@@ -133,7 +134,8 @@ def process_input():
 
 
 def train():
-    global model_tree, model_trained
+    global model_tree, model_trained, acc, val_ac
+    
     X_train, X_test, y_train, y_test = train_test_split(x_data, y_data,
                                                         test_size=0.3, random_state=0)
     if model_name == "xbnet" or model_name =="neural network":
@@ -153,6 +155,7 @@ def train():
                                     str(max(acc))[:4]+ ".pt",)
         # toast("Test Accuracy is: " +str(max(val_ac))[:4] +" and Training Accuracy is: " +
         #             str(max(acc))[:4] + " and model is saved.",duration= 10)
+        return render_template("results.html",info={"training_acc":acc,"testing_acc":val_ac})
 
     elif (model_name == "xgboost" or model_name == "randomforest"
               or model_name == "decision tree" or model_name == "lightgbm"):
@@ -194,7 +197,6 @@ def train():
         with open(model_name+"_testAccuracy_" +str(testing_acc)[:4] +"_trainAccuracy_" +
                                     str(training_acc)[:4]+ ".pkl", 'wb') as outfile:
             pickle.dump(model_tree,outfile)
-        
 @app.route('/predict', methods=['GET', 'POST'])
 def predict_results():
     df_predict = pd.read_csv(request.files["csvpredictfile"])

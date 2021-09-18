@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-md-12">
+    <div class="container" style="color: white;">
+        <div class="card">
+            <div class="card-title"><h3>Results</h3>
+                <div class="card-body">
+                    <img src="D:\ModelMaker\Training_graphs.png">
+                </div>
+                <div class="card-footer">
+                    <h4>Training accuracy is {{info['training_acc']}}</h4><br>
+                    <h4>Testing accuracy is {{info['testing_acc']}}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
