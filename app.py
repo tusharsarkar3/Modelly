@@ -69,12 +69,22 @@ def getlayers():
     global layers_dims
     layers_dims = []
     if request.method == 'POST':
-        for i in layers:
-            layers_dims.append(int(request.form["i"+str(i)]))
-            layers_dims.append(int(request.form["o" + str(i)]))
-        print(layers_dims)
-        train()
-        return render_template('layers.html', layers=layers) #3 to test
+        if model_name.lower() == "xbnet" or model_name.lower() == "neural network":
+            for i in layers:
+                layers_dims.append(int(request.form["i"+str(i)]))
+                layers_dims.append(int(request.form["o" + str(i)]))
+            print(layers_dims)
+            train()
+        elif (model_name == "xgboost" or model_name == "randomforest"
+              or model_name == "decision tree" or model_name == "lightgbm"):
+            for i in request.form.keys():
+                try:
+                    layers_dims.append(int(request.form[i]))
+                except:
+                    layers_dims.append(float(request.form[i]))
+            print(layers_dims)
+            train()
+        return render_template('treesinp.html', layers=layers) #3 to test
     
 
 def process_input():
@@ -173,9 +183,9 @@ def train():
             testing_acc = model_tree.score(X_test,y_test)
         print("Training and Testing accuracies are "+str(training_acc*100)
                        +" "+str(testing_acc*100) + " respectively and model is stored")
-        # with open(self.model+"_testAccuracy_" +str(testing_acc)[:4] +"_trainAccuracy_" +
-        #                             str(training_acc)[:4]+ ".pkl", 'wb') as outfile:
-        #     pickle.dump(self.model_tree,outfile)
+        with open(model_name+"_testAccuracy_" +str(testing_acc)[:4] +"_trainAccuracy_" +
+                                    str(training_acc)[:4]+ ".pkl", 'wb') as outfile:
+            pickle.dump(model_tree,outfile)
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict_results():
