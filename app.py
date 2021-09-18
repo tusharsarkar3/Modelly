@@ -1,4 +1,4 @@
-from flask import Flask, render_template,request
+from flask import Flask, render_template,request,send_file
 import csv
 import pandas as pd
 from xgboost import XGBClassifier
@@ -174,9 +174,11 @@ def train():
         #                             str(training_acc)[:4]+ ".pkl", 'wb') as outfile:
         #     pickle.dump(self.model_tree,outfile)
 
+@app.route('/predict', methods=['GET', 'POST'])
 def predict_results():
-    df_predict = pd.read_csv(request.files[""])
-    data = df[columns_finally_used]
+    df_predict = pd.read_csv(request.files["csvpredictfile"])
+    print(list(columns_finally_used))
+    data = df_predict[list(columns_finally_used)]
     for i in data.columns:
         if data[i].isnull().sum() > 0:
             data[i].fillna(imputations[i], inplace=True)
@@ -188,10 +190,11 @@ def predict_results():
     else:
         predictions = predict(model_trained, data.to_numpy())
         if label_y == True:
-            df[target] = y_label_encoder.inverse_transform(predictions)
+            df_predict[target] = y_label_encoder.inverse_transform(predictions)
         else:
-            df[target] = predictions
-    df.to_csv("Predicted_Results.csv",index=False)
+            df_predict[target] = predictions
+    df_predict.to_csv("Predicted_Results.csv",index=False)
+    return send_file("Predicted_Results.csv")
     # toast(text="Predicted_Results.csv in this directory has the results",
     #                    duration = 10)
 
