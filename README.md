@@ -1,5 +1,5 @@
 # Modelly 
-## Your one stop destination for building state of the art machine and deep learning models.
+### Your one stop destination for building state of the art machine and deep learning models.
 
 [![](https://img.shields.io/badge/Made_with-PyTorch-res?style=for-the-badge&logo=pytorch)](https://pytorch.org/ "PyTorch")
 
