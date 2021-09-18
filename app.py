@@ -75,6 +75,7 @@ def getlayers():
                 layers_dims.append(int(request.form["o" + str(i)]))
             print(layers_dims)
             train()
+            return render_template('layers.html', layers=layers)
         elif (model_name == "xgboost" or model_name == "randomforest"
               or model_name == "decision tree" or model_name == "lightgbm"):
             for i in request.form.keys():
@@ -84,7 +85,7 @@ def getlayers():
                     layers_dims.append(float(request.form[i]))
             print(layers_dims)
             train()
-        return render_template('treesinp.html', layers=layers) #3 to test
+            return render_template('treesinp.html', layers=layers) #3 to test
     
 
 def process_input():
