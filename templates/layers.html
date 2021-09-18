@@ -1,9 +1,9 @@
-{% extends "base.html" %}
+ {% extends "base.html" %}
   {% block content %}
-      
+
         <div class="form-card container">
             <div class="row">
-            <div class="col-lg-6 no-float">         
+            <div class="col-lg-6 no-float">
             <div class="card mr-1">
               <div class="card-body">
                 <h3 class="card-title">Train</h3>
@@ -11,7 +11,7 @@
                 <form  action = "http://localhost:5000/layers" method = "POST"
                   enctype = "multipart/form-data">
                   <p class="card-text">
-                <div class="form-group">         
+                <div class="form-group">
                     <label class="col-sm-12 col-form-label"><h4>Layer {{ i }}</h4></label>
                     Input
                     <div class="col-sm-10">
@@ -19,7 +19,7 @@
                     </div>
                     Output
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" id="outputlayer{{i}}" name="o{{i}}">
+                        <input type="number" class="form-control" id="inputlayer{{i}}" name="o{{i}}">
                       </div>
                   </div>
                 </p> <hr>
