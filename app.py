@@ -49,7 +49,7 @@ def upload_file():
         elif (model_name == "xgboost" or model_name == "randomforest"
               or model_name == "decision tree" or model_name == "lightgbm"):
             process_input()
-            return render_template('layers.html', layers=layers)
+            return render_template('treesinp.html', layers=layers)
             # self.tree_model()
         elif model_name.lower() == "neural network":
             n_layers_boosted = 0
