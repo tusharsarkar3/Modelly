@@ -48,7 +48,8 @@ def upload_file():
             # self.net_model()
         elif (model_name == "xgboost" or model_name == "randomforest"
               or model_name == "decision tree" or model_name == "lightgbm"):
-            pass
+            process_input()
+            return render_template('layers.html', layers=layers)
             # self.tree_model()
         elif model_name.lower() == "neural network":
             n_layers_boosted = 0
@@ -174,7 +175,7 @@ def train():
         #     pickle.dump(self.model_tree,outfile)
 
 def predict_results():
-    df_predict = pd.read_csv(self.file_selected)
+    df_predict = pd.read_csv(request.files[""])
     data = df[columns_finally_used]
     for i in data.columns:
         if data[i].isnull().sum() > 0:
