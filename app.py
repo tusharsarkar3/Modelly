@@ -87,6 +87,13 @@ def getlayers():
             train()
             return render_template('treesinp.html', layers=layers) #3 to test
     
+@app.route('/default', methods=['GET', 'POST'])
+def default():
+    global layers_dims
+    layers_dims = [100, 6, 0.3, 1, 1]
+    train()
+    return render_template('treesinp.html', layers=layers)
+
 
 def process_input():
     global x_data, y_data, label_encoded, imputations, label_y, columns_finally_used, y_label_encoder
