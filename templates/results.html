@@ -5,11 +5,15 @@
         <div class="card">
             <div class="card-title"><h3>Results</h3>
                 <div class="card-body">
-                    <img src="D:\ModelMaker\Training_graphs.png">
+                    <img src="/static/images/Training_graphs.png"  >
                 </div>
                 <div class="card-footer">
                     <h4>Training accuracy is {{info['training_acc']}}</h4><br>
                     <h4>Testing accuracy is {{info['testing_acc']}}</h4>
+                    <form  action = "http://localhost:5000/download" method = "POST"
+                                            enctype = "multipart/form-data">
+                        <span ><button class="btn btn mybts" type = "submit" >Download Trained Model</button></span>
+                    </form>
                 </div>
             </div>
         </div>

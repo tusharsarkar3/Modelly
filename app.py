@@ -13,7 +13,8 @@ from XBNet.training_utils import training,predict
 from XBNet.models import XBNETClassifier
 from XBNet.run import run_XBNET
 import matplotlib.pyplot as plt
-from os import environ
+import os
+import shutil
 import pickle
 
 app = Flask(__name__)
@@ -66,6 +67,14 @@ def upload_file():
 @app.route('/layers', methods=['GET', 'POST'])
 def getlayers():
     global layers_dims
+    fileExt = r".pt"
+    file = [_ for _ in os.listdir(os.getcwd()) if _.endswith(fileExt)]
+    if len(file) > 0:
+        os.remove(file[0])
+    fileExt = r".pkl"
+    file = [_ for _ in os.listdir(os.getcwd()) if _.endswith(fileExt)]
+    if len(file) > 0:
+        os.remove(file[0])
     layers_dims = []
     if request.method == 'POST':
         if model_name.lower() == "xbnet" or model_name.lower() == "neural network":
@@ -74,6 +83,12 @@ def getlayers():
                 layers_dims.append(int(request.form["o" + str(i)]))
             print(layers_dims)
             train()
+            path = os.path.join("static/", "images")
+            if os.path.isdir(path) == False:
+                os.mkdir(path)
+            if os.path.isfile("static\images\Training_graphs.png") == True:
+                os.remove("static\images\Training_graphs.png")
+            shutil.move("Training_graphs.png", path)
             return render_template("results.html",info={"training_acc":acc[-1],"testing_acc":val_ac[-1]})
 
         elif (model_name == "xgboost" or model_name == "randomforest"
@@ -85,14 +100,35 @@ def getlayers():
                     layers_dims.append(float(request.form[i]))
             print(layers_dims)
             train()
+
             return render_template("results.html",info={"training_acc":training_acc,"testing_acc":testing_acc})
     
 @app.route('/default', methods=['GET', 'POST'])
 def default():
     global layers_dims
+    global layers_dims
+    fileExt = r".pt"
+    file = [_ for _ in os.listdir(os.getcwd()) if _.endswith(fileExt)]
+    if len(file) > 0:
+        os.remove(file[0])
+    fileExt = r".pkl"
+    file = [_ for _ in os.listdir(os.getcwd()) if _.endswith(fileExt)]
+    if len(file) > 0:
+        os.remove(file[0])
     layers_dims = [100, 6, 0.3, 1, 1]
     train()
-    return render_template('treesinp.html', layers=layers)
+    return render_template("results.html",info={"training_acc":training_acc,"testing_acc":testing_acc})
+
+@app.route('/download', methods=['GET', 'POST'])
+def download():
+    if model_name.lower() == "xbnet" or model_name.lower() == "neural network":
+        fileExt = r".pt"
+        file = [_ for _ in os.listdir(os.getcwd()) if _.endswith(fileExt)][0]
+        return send_file(file)
+    else:
+        fileExt = r".pkl"
+        file = [_ for _ in os.listdir(os.getcwd()) if _.endswith(fileExt)][0]
+        return send_file(file)
 
 
 def process_input():
@@ -133,7 +169,7 @@ def process_input():
 
 
 def train():
-    global model_tree, model_trained, acc, val_ac
+    global model_tree, model_trained, acc, val_ac, training_acc, testing_acc
     X_train, X_test, y_train, y_test = train_test_split(x_data, y_data,
                                                         test_size=0.3, random_state=0)
     if model_name == "xbnet" or model_name =="neural network":
