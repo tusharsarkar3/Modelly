@@ -189,7 +189,7 @@ def train():
         optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 
         model_trained, acc, lo, val_ac, val_lo, cl = run_XBNET(X_train, X_test, y_train, y_test, model,
-                                                               criterion, optimizer, 32, 10, save=True)
+                                                               criterion, optimizer, 32, 300, save=True)
         print(type(cl))
         model_trained.save(m + "_testAccuracy_" + str(max(val_ac))[:4] + "_trainAccuracy_" +
                            str(max(acc))[:4] + ".pt", )
