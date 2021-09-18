@@ -129,8 +129,8 @@ def train():
         optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 
         model_trained, acc, lo, val_ac, val_lo = run_XBNET(X_train, X_test, y_train, y_test, model,
-                                                           criterion, optimizer, 32, 10, plot= False)
-        plot.savefig("Training_graphs.png")
+                                                           criterion, optimizer, 32, 10, save= True)
+
         model_trained.save(m+"_testAccuracy_" +str(max(val_ac))[:4] +"_trainAccuracy_" +
                                     str(max(acc))[:4]+ ".pt",)
         # toast("Test Accuracy is: " +str(max(val_ac))[:4] +" and Training Accuracy is: " +
