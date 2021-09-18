@@ -1,15 +1,15 @@
-from flask import Flask, render_template,request,send_file
+from flask import Flask, render_template, request, send_file
 import csv
 import pandas as pd
 from xgboost import XGBClassifier
-from sklearn.ensemble import  RandomForestClassifier
-from sklearn.tree import  DecisionTreeClassifier
-from lightgbm import  LGBMClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
+from lightgbm import LGBMClassifier
 import torch
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
-from XBNet.training_utils import training,predict
+from XBNet.training_utils import training, predict
 from XBNet.models import XBNETClassifier
 from XBNet.run import run_XBNET
 import matplotlib.pyplot as plt
@@ -30,7 +30,7 @@ def upload_file():
     global df
     global model_name
     global layers
-    global target ,n_layers_boosted
+    global target, n_layers_boosted
     if request.method == 'POST':
         df = pd.read_csv(request.files['csvfile'])
         model_name = request.form['model']
@@ -59,11 +59,11 @@ def upload_file():
             return render_template('layers.html', layers=layers)
             # self.net_model()
 
+        # get number of layers, preferably produce a list
 
-        #get number of layers, preferably produce a list
+        # return 'file uploaded successfully'
 
 
-        #return 'file uploaded successfully'
 @app.route('/layers', methods=['GET', 'POST'])
 def getlayers():
     global layers_dims
@@ -79,17 +79,19 @@ def getlayers():
     if request.method == 'POST':
         if model_name.lower() == "xbnet" or model_name.lower() == "neural network":
             for i in layers:
-                layers_dims.append(int(request.form["i"+str(i)]))
+                layers_dims.append(int(request.form["i" + str(i)]))
                 layers_dims.append(int(request.form["o" + str(i)]))
             print(layers_dims)
             train()
             path = os.path.join("static/", "images")
+            print(path)
             if os.path.isdir(path) == False:
                 os.mkdir(path)
             if os.path.isfile("static\images\Training_graphs.png") == True:
                 os.remove("static\images\Training_graphs.png")
             shutil.move("Training_graphs.png", path)
-            return render_template("results.html",info={"training_acc":acc[-1],"testing_acc":val_ac[-1]})
+            return render_template("results.html", info={"training_acc": acc[-1], "testing_acc": val_ac[-1],
+                                                         "img": True})
 
         elif (model_name == "xgboost" or model_name == "randomforest"
               or model_name == "decision tree" or model_name == "lightgbm"):
@@ -101,8 +103,10 @@ def getlayers():
             print(layers_dims)
             train()
 
-            return render_template("results.html",info={"training_acc":training_acc,"testing_acc":testing_acc})
-    
+            return render_template("results.html", info={"training_acc": training_acc,
+                                                         "testing_acc": testing_acc, "img": False})
+
+
 @app.route('/default', methods=['GET', 'POST'])
 def default():
     global layers_dims
@@ -117,7 +121,9 @@ def default():
         os.remove(file[0])
     layers_dims = [100, 6, 0.3, 1, 1]
     train()
-    return render_template("results.html",info={"training_acc":training_acc,"testing_acc":testing_acc})
+    return render_template("results.html", info={"training_acc": training_acc, "testing_acc": testing_acc,
+                                                 "img": False})
+
 
 @app.route('/download', methods=['GET', 'POST'])
 def download():
@@ -165,72 +171,74 @@ def process_input():
         y_label_encoder = LabelEncoder()
         y_data = y_label_encoder.fit_transform(y_data)
     print("Number of features are: " + str(x_data.shape[1]) +
-                            " classes are: "+ str(len(np.unique(y_data))))
+          " classes are: " + str(len(np.unique(y_data))))
 
 
 def train():
     global model_tree, model_trained, acc, val_ac, training_acc, testing_acc
     X_train, X_test, y_train, y_test = train_test_split(x_data, y_data,
                                                         test_size=0.3, random_state=0)
-    if model_name == "xbnet" or model_name =="neural network":
+    if model_name == "xbnet" or model_name == "neural network":
         m = model_name
         print(layers)
         print(layers_dims, n_layers_boosted)
-        model = XBNETClassifier( X_train, y_train, num_layers= int(len(layers)/2),num_layers_boosted= n_layers_boosted,
+        model = XBNETClassifier(X_train, y_train, num_layers=int(len(layers) / 2), num_layers_boosted=n_layers_boosted,
                                 input_through_cmd=True, inputs_for_gui=layers_dims,
                                 )
         criterion = torch.nn.CrossEntropyLoss()
         optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 
-        model_trained, acc, lo, val_ac, val_lo,cl = run_XBNET(X_train, X_test, y_train, y_test, model,
-                                                           criterion, optimizer, 32, 10, save= True)
+        model_trained, acc, lo, val_ac, val_lo, cl = run_XBNET(X_train, X_test, y_train, y_test, model,
+                                                               criterion, optimizer, 32, 10, save=True)
         print(type(cl))
-        model_trained.save(m+"_testAccuracy_" +str(max(val_ac))[:4] +"_trainAccuracy_" +
-                                    str(max(acc))[:4]+ ".pt",)
+        model_trained.save(m + "_testAccuracy_" + str(max(val_ac))[:4] + "_trainAccuracy_" +
+                           str(max(acc))[:4] + ".pt", )
         # toast("Test Accuracy is: " +str(max(val_ac))[:4] +" and Training Accuracy is: " +
         #             str(max(acc))[:4] + " and model is saved.",duration= 10)
-        return render_template("results.html",info={"training_acc":acc,"testing_acc":val_ac})
+        return render_template("results.html", info={"training_acc": acc, "testing_acc": val_ac})
 
     elif (model_name == "xgboost" or model_name == "randomforest"
-              or model_name == "decision tree" or model_name == "lightgbm"):
+          or model_name == "decision tree" or model_name == "lightgbm"):
         if model_name == "xgboost":
-            model_tree = XGBClassifier(n_estimators= layers_dims[0],
-                                  max_depth= layers_dims[1],
-                                  learning_rate= layers_dims[2],
-                                  subsample= layers_dims[3],
-                                  colsample_bylevel = layers_dims[4],
-                                  random_state=0,n_jobs=-1,
-                                  )
-            model_tree.fit(X_train, y_train,eval_metric="mlogloss")
+            model_tree = XGBClassifier(n_estimators=layers_dims[0],
+                                       max_depth=layers_dims[1],
+                                       learning_rate=layers_dims[2],
+                                       subsample=layers_dims[3],
+                                       colsample_bylevel=layers_dims[4],
+                                       random_state=0, n_jobs=-1,
+                                       )
+            model_tree.fit(X_train, y_train, eval_metric="mlogloss")
             training_acc = model_tree.score(X_train, y_train)
-            testing_acc = model_tree.score(X_test,y_test)
+            testing_acc = model_tree.score(X_test, y_test)
         elif model_name == "randomforest":
             model_tree = RandomForestClassifier(n_estimators=layers_dims[0],
-                                           max_depth=layers_dims[1],
-                                           random_state=0,n_jobs=-1)
+                                                max_depth=layers_dims[1],
+                                                random_state=0, n_jobs=-1)
             model_tree.fit(X_train, y_train)
             training_acc = model_tree.score(X_train, y_train)
-            testing_acc = model_tree.score(X_test,y_test)
+            testing_acc = model_tree.score(X_test, y_test)
         elif model_name == "decision tree":
-            model_tree = DecisionTreeClassifier(max_depth= layers_dims[1],random_state=0)
+            model_tree = DecisionTreeClassifier(max_depth=layers_dims[1], random_state=0)
             model_tree.fit(X_train, y_train)
             training_acc = model_tree.score(X_train, y_train)
-            testing_acc = model_tree.score(X_test,y_test)
+            testing_acc = model_tree.score(X_test, y_test)
         elif model_name == "lightgbm":
-            model_tree = LGBMClassifier(n_estimators= layers_dims[0],
-                                  max_depth= layers_dims[1],
-                                  learning_rate= layers_dims[2],
-                                  subsample= layers_dims[3],
-                                  colsample_bylevel = layers_dims[4],
-                                  random_state=0,n_jobs=-1,)
-            model_tree.fit(X_train, y_train,eval_metric="mlogloss")
+            model_tree = LGBMClassifier(n_estimators=layers_dims[0],
+                                        max_depth=layers_dims[1],
+                                        learning_rate=layers_dims[2],
+                                        subsample=layers_dims[3],
+                                        colsample_bylevel=layers_dims[4],
+                                        random_state=0, n_jobs=-1, )
+            model_tree.fit(X_train, y_train, eval_metric="mlogloss")
             training_acc = model_tree.score(X_train, y_train)
-            testing_acc = model_tree.score(X_test,y_test)
-        print("Training and Testing accuracies are "+str(training_acc*100)
-                       +" "+str(testing_acc*100) + " respectively and model is stored")
-        with open(model_name+"_testAccuracy_" +str(testing_acc)[:4] +"_trainAccuracy_" +
-                                    str(training_acc)[:4]+ ".pkl", 'wb') as outfile:
-            pickle.dump(model_tree,outfile)
+            testing_acc = model_tree.score(X_test, y_test)
+        print("Training and Testing accuracies are " + str(training_acc * 100)
+              + " " + str(testing_acc * 100) + " respectively and model is stored")
+        with open(model_name + "_testAccuracy_" + str(testing_acc)[:4] + "_trainAccuracy_" +
+                  str(training_acc)[:4] + ".pkl", 'wb') as outfile:
+            pickle.dump(model_tree, outfile)
+
+
 @app.route('/predict', methods=['GET', 'POST'])
 def predict_results():
     df_predict = pd.read_csv(request.files["csvpredictfile"])
@@ -242,7 +250,7 @@ def predict_results():
         if i in label_encoded.keys():
             data[i] = label_encoded[i].transform(data[i])
     if (model_name == "xgboost" or model_name == "randomforest"
-        or model_name == "decision tree" or model_name == "lightgbm"):
+            or model_name == "decision tree" or model_name == "lightgbm"):
         predictions = model_tree.predict(data.to_numpy())
     else:
         predictions = predict(model_trained, data.to_numpy())
@@ -250,7 +258,7 @@ def predict_results():
             df_predict[target] = y_label_encoder.inverse_transform(predictions)
         else:
             df_predict[target] = predictions
-    df_predict.to_csv("Predicted_Results.csv",index=False)
+    df_predict.to_csv("Predicted_Results.csv", index=False)
     return send_file("Predicted_Results.csv")
     # toast(text="Predicted_Results.csv in this directory has the results",
     #                    duration = 10)
