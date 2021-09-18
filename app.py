@@ -67,8 +67,12 @@ def getlayers():
     global layers_dims
     layers_dims = []
     if request.method == 'POST':
-        print(request.form["1"])
-        return render_template('', layers=layers) #3 to test
+        for i in layers:
+            layers_dims.append(int(request.form["i"+str(i)]))
+            layers_dims.append(int(request.form["o" + str(i)]))
+        print(layers_dims)
+        train()
+        return render_template('layers.html', layers=layers) #3 to test
     
 
 def process_input():
@@ -114,9 +118,10 @@ def train():
                                                         test_size=0.3, random_state=0)
     if model_name == "xbnet" or model_name =="neural network":
         m = model_name
-        model = XBNETClassifier( X_train, y_train, layers,
+        print(layers)
+        print(layers_dims, n_layers_boosted)
+        model = XBNETClassifier( X_train, y_train, num_layers= int(len(layers)/2),num_layers_boosted= n_layers_boosted,
                                 input_through_cmd=True, inputs_for_gui=layers_dims,
-                                 num_layers_boosted= n_layers_boosted
                                 )
         criterion = torch.nn.CrossEntropyLoss()
         optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
