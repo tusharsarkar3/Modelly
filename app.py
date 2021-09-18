@@ -75,6 +75,7 @@ def getlayers():
                 layers_dims.append(int(request.form["o" + str(i)]))
             print(layers_dims)
             train()
+            return render_template('layers.html', layers=layers)
         elif (model_name == "xgboost" or model_name == "randomforest"
               or model_name == "decision tree" or model_name == "lightgbm"):
             for i in request.form.keys():
@@ -84,7 +85,7 @@ def getlayers():
                     layers_dims.append(float(request.form[i]))
             print(layers_dims)
             train()
-        return render_template('treesinp.html', layers=layers) #3 to test
+            return render_template('treesinp.html', layers=layers) #3 to test
     
 
 def process_input():
@@ -186,7 +187,7 @@ def train():
         with open(model_name+"_testAccuracy_" +str(testing_acc)[:4] +"_trainAccuracy_" +
                                     str(training_acc)[:4]+ ".pkl", 'wb') as outfile:
             pickle.dump(model_tree,outfile)
-
+        
 @app.route('/predict', methods=['GET', 'POST'])
 def predict_results():
     df_predict = pd.read_csv(request.files["csvpredictfile"])
